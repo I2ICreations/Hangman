@@ -10,19 +10,60 @@ using namespace std;
 
 int main()
 {
-    vector<string> words = { "apple", "banana", "cherry", "dragonfruit", "elderberry", "fig", "grape", "honeydew", "kiwi", "lemon",
-                            "mango", "nectarine", "orange", "papaya", "quince", "raspberry", "strawberry", "tangerine", "ugli", "watermelon" }; //A list of random words that could be chosen for the guessing game
+    vector<string> Ewords = { "Cat", "Dog", "Sun", "Fish", "Tree", "Bird", "Milk", "Cake", "Book", "Duck" };
+    vector<string> Mwords = { "Planet", "Ocean", "Winter", "Rocket", "Flower", "Guitar", "Castle", "Pirate", "Garden", "Monster" };
+    vector<string> Hwords = { "Zephyr", "Quizzical", "Jigsaw", "Crypt", "Oxygen", "Phantom", "Vortex", "Twilight", "Labyrinth", "Gargoyle" };
 
     srand(static_cast<unsigned int>(time(0)));       //Seed the random number generator 
 
+    vector<string> words;
+    string difficulty;
+    bool valid_difficulty_level = false;
+
+    cout << "HANGMAN" << '\n';
+    cout << "Pick a difficulty" << '\n';
+    cout << "Easy\n";
+    cout << "Medium\n";
+    cout << "Hard\n";
+
+    //Loop over until a valid difficulty has been chosen
+    while (!valid_difficulty_level) {
+        cin >> difficulty;
+
+        for (auto& c : difficulty) c = tolower(c);
+
+        if (difficulty == "easy") 
+        {
+            cout << "You selected Easy difficulty.\n";
+            words = Ewords;
+            valid_difficulty_level = true;
+        }
+        else if (difficulty == "medium")
+        {            
+            cout << "You selected Medium difficulty.\n";
+            words = Mwords;
+            valid_difficulty_level = true;
+        }
+        else if (difficulty == "hard")
+        {
+            cout << "You selected Hard difficulty.\n";
+            words = Hwords;
+            valid_difficulty_level = true;
+        }
+        else
+        {
+            cout << "Invalid difficulty.\n";
+        }
+    }
+
     string word = words[rand() % words.size()];    //Randomly select a word from the word list 
+    for (auto &c : word ) c = tolower(c);
+
     string displayed_word(word.length(), '_');
     char guess;
     int tries = 0;
-    int lives = 4;
+    int lives = 6;
     set <char> used_letters;
-
-    cout << "HANGMAN" << '\n';
 
     while (displayed_word != word && lives > 0)
     {
@@ -37,11 +78,10 @@ int main()
         cout << "Guess a letter" << '\n';
         cin >> guess;
 
-        guess = tolower(guess);
-
         //CHARACTER VALIDATION
         if (!isalpha(guess)) {                      //if the character inputed isnt part of the alphabeth 
             cout << "IVALID CHARACTER!\n";          //display invalid character
+            guess = tolower(guess);
             continue;
         }
 
@@ -72,10 +112,11 @@ int main()
         if (lives < 1)
         {
             cout << "GAME OVER" << '\n';
-            cout << "The word was: " << word;
             break;
         }
     }
+
+    cout << "The word was: " << word;
 
     return 0;
 }
